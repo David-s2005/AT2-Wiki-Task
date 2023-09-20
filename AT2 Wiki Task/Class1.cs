@@ -45,11 +45,10 @@ namespace AT2_Wiki_Task
 
         #endregion
 
-        public int CompareTo(object incomingobject) 
+        public int CompareTo(object obj) 
         {
-            Information incomingInformation = incomingobject as Information;
-
-            return this.Name.CompareTo(incomingInformation.Name);
+            Information CompareClass = obj as Information;
+            return this.name.CompareTo(CompareClass.Name);
         }
         public Information(String _name, String _category, String _structure, String _definition) 
         {
