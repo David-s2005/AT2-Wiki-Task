@@ -5,6 +5,9 @@ using System.Drawing.Drawing2D;
 using System.Security.Policy;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Microsoft.VisualBasic;
+
 namespace AT2_Wiki_Task
 {
     public partial class Form1 : Form
@@ -14,23 +17,29 @@ namespace AT2_Wiki_Task
             InitializeComponent();
         }
 
-        public List<Information> InformationList = new List<Information>();
+        static public List<Information> InformationList = new List<Information>();
 
         #region event handlers
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            Information info = new Information("Array", "Linear", "Array", "An array data structure consists of a collection of elements(values or variables), each identified by at least one array index or key.An array is stored such that the position of each element can be computed from its index tuple by a mathematical formula.");
-            InformationList.Add(info);
+            if (radioButtonLinear.Checked == false && radioButtonNonLinear.Checked == false)
+            {
+                MessageBox.Show("Please select a structure");
+            }
+            else if (textBoxDefinition.Text == null)
+            {
+                MessageBox.Show("Please provide a defintion");
+            }
+            else
+            {
+                populateForm();
+                addItem();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            comboBoxCategory.Items.Add("Array");
-            comboBoxCategory.Items.Add("List");
-            comboBoxCategory.Items.Add("Tree");
-            comboBoxCategory.Items.Add("Graphs");
-            comboBoxCategory.Items.Add("Abstract");
-            comboBoxCategory.Items.Add("Hash");
+            Information info = new Information("Array", "Array", "Linear", "");
         }
 
         private void comboBoxCategory_KeyPress(object sender, KeyPressEventArgs e)
@@ -38,9 +47,18 @@ namespace AT2_Wiki_Task
             if (e.KeyChar == (int)Keys.Enter)
             {
                 comboBoxCategory.Items.Add(comboBoxCategory.Text);
+                addItem();
+                populateForm();
             }
-
-            // append the new object into list after.
+        }
+        private void textBoxName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (int)Keys.Enter)
+            {
+                comboBoxCategory.Items.Add(comboBoxCategory.Text);
+                addItem();
+                populateForm();
+            }
         }
 
         #endregion
@@ -49,21 +67,92 @@ namespace AT2_Wiki_Task
 
         public void addItem()
         {
-            // String name = 
+            bool nameOK = nameValid();
+
+            if (nameOK == true)
+            {
+                string name = textBoxName.Text;
+                string category = comboBoxCategory.Text;
+                string structure = linearSelected();
+                string definition = textBoxDefinition.Text;
+
+                Information info = new Information(name, category, structure, definition);
+                InformationList.Add(info);
+            }
         }
 
-        public bool validName() 
+        public void populateForm()
         {
+            listViewNameCategory.Items.Clear();
+            comboBoxCategory.Items.Clear();
+
+            bool categoryOK = categoryValid();
+
             foreach (Information info in InformationList)
             {
-                if (InformationList.Exists(info => info.getName == Name))
-                {
+                ListViewItem listViewItem = new ListViewItem(info.Name);
+                listViewNameCategory.Items.Add(listViewItem); 
+                listViewItem.SubItems.Add(info.Category);
 
+                if (categoryOK == true)
+                {
+                    comboBoxCategory.Items.Add(info.Category);
                 }
             }
         }
 
-        #endregion
+        public bool nameValid()
+        {
+            if (textBoxName.Text != "~")
+            {
+                foreach (Information info in InformationList)
+                {
+                    if (info.Name == textBoxName.Text)
+                    {
+                        MessageBox.Show("Item already exists in list.");
+                        return false;
+                    }
+                    else if (info.Name == null)
+                    {
+                        MessageBox.Show("Name cannot be a null value");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
 
+        public bool categoryValid() 
+        {
+            string category = comboBoxCategory.Text;
+
+                foreach (Information info in InformationList) 
+                {
+                    if (info.Category == category)
+                    {
+                        return false;
+                    }
+                }
+            return true;
+        }
+
+        public string linearSelected()
+        {
+            if (radioButtonLinear.Checked == true)
+            {
+                return "Linear";
+            }
+            return "Non-Linear";
+        }
+
+        public int findIndexByName(string name) 
+        {
+            Information searchInformation = new Information(name, "placeholder", "placeholder", "placeholder");
+            InformationList.Sort();
+            return InformationList.BinarySearch(searchInformation);
+        }
+
+        #endregion
     }
 }

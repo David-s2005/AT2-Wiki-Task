@@ -31,15 +31,18 @@
             buttonLoad = new Button();
             buttonSave = new Button();
             buttonAdd = new Button();
-            textBox1 = new TextBox();
+            textBoxName = new TextBox();
             labelName = new Label();
             comboBoxCategory = new ComboBox();
             labelCategory = new Label();
             groupBoxStructure = new GroupBox();
-            radioButtonLinear = new RadioButton();
             radioButtonNonLinear = new RadioButton();
-            textBox2 = new TextBox();
+            radioButtonLinear = new RadioButton();
+            textBoxDefinition = new TextBox();
             labelDefinition = new Label();
+            listViewNameCategory = new ListView();
+            columnHeaderName = new ColumnHeader();
+            columnHeaderCategory = new ColumnHeader();
             groupBoxStructure.SuspendLayout();
             SuspendLayout();
             // 
@@ -71,12 +74,13 @@
             buttonAdd.UseVisualStyleBackColor = true;
             buttonAdd.Click += buttonAdd_Click;
             // 
-            // textBox1
+            // textBoxName
             // 
-            textBox1.Location = new Point(12, 112);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 4;
+            textBoxName.Location = new Point(12, 112);
+            textBoxName.Name = "textBoxName";
+            textBoxName.Size = new Size(100, 23);
+            textBoxName.TabIndex = 4;
+            textBoxName.KeyPress += textBoxName_KeyPress;
             // 
             // labelName
             // 
@@ -116,17 +120,6 @@
             groupBoxStructure.TabStop = false;
             groupBoxStructure.Text = "Structure";
             // 
-            // radioButtonLinear
-            // 
-            radioButtonLinear.AutoSize = true;
-            radioButtonLinear.Location = new Point(6, 22);
-            radioButtonLinear.Name = "radioButtonLinear";
-            radioButtonLinear.Size = new Size(57, 19);
-            radioButtonLinear.TabIndex = 0;
-            radioButtonLinear.TabStop = true;
-            radioButtonLinear.Text = "Linear";
-            radioButtonLinear.UseVisualStyleBackColor = true;
-            // 
             // radioButtonNonLinear
             // 
             radioButtonNonLinear.AutoSize = true;
@@ -138,13 +131,24 @@
             radioButtonNonLinear.Text = "Non-Linear";
             radioButtonNonLinear.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // radioButtonLinear
             // 
-            textBox2.Location = new Point(171, 69);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(149, 203);
-            textBox2.TabIndex = 9;
+            radioButtonLinear.AutoSize = true;
+            radioButtonLinear.Location = new Point(6, 22);
+            radioButtonLinear.Name = "radioButtonLinear";
+            radioButtonLinear.Size = new Size(57, 19);
+            radioButtonLinear.TabIndex = 0;
+            radioButtonLinear.TabStop = true;
+            radioButtonLinear.Text = "Linear";
+            radioButtonLinear.UseVisualStyleBackColor = true;
+            // 
+            // textBoxDefinition
+            // 
+            textBoxDefinition.Location = new Point(171, 69);
+            textBoxDefinition.Multiline = true;
+            textBoxDefinition.Name = "textBoxDefinition";
+            textBoxDefinition.Size = new Size(149, 203);
+            textBoxDefinition.TabIndex = 9;
             // 
             // labelDefinition
             // 
@@ -155,18 +159,37 @@
             labelDefinition.TabIndex = 10;
             labelDefinition.Text = "Definition";
             // 
+            // listViewNameCategory
+            // 
+            listViewNameCategory.Columns.AddRange(new ColumnHeader[] { columnHeaderName, columnHeaderCategory });
+            listViewNameCategory.Location = new Point(339, 12);
+            listViewNameCategory.Name = "listViewNameCategory";
+            listViewNameCategory.Size = new Size(136, 260);
+            listViewNameCategory.TabIndex = 35;
+            listViewNameCategory.UseCompatibleStateImageBehavior = false;
+            listViewNameCategory.View = View.Details;
+            // 
+            // columnHeaderName
+            // 
+            columnHeaderName.Text = "Name";
+            // 
+            // columnHeaderCategory
+            // 
+            columnHeaderCategory.Text = "Category";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(629, 280);
+            ClientSize = new Size(516, 280);
+            Controls.Add(listViewNameCategory);
             Controls.Add(labelDefinition);
-            Controls.Add(textBox2);
+            Controls.Add(textBoxDefinition);
             Controls.Add(groupBoxStructure);
             Controls.Add(labelCategory);
             Controls.Add(comboBoxCategory);
             Controls.Add(labelName);
-            Controls.Add(textBox1);
+            Controls.Add(textBoxName);
             Controls.Add(buttonAdd);
             Controls.Add(buttonSave);
             Controls.Add(buttonLoad);
@@ -184,14 +207,17 @@
         private Button buttonLoad;
         private Button buttonSave;
         private Button buttonAdd;
-        private TextBox textBox1;
+        private TextBox textBoxName;
         private Label labelName;
         private ComboBox comboBoxCategory;
         private Label labelCategory;
         private GroupBox groupBoxStructure;
         private RadioButton radioButtonNonLinear;
         private RadioButton radioButtonLinear;
-        private TextBox textBox2;
+        private TextBox textBoxDefinition;
         private Label labelDefinition;
+        private ListView listViewNameCategory;
+        private ColumnHeader columnHeaderName;
+        private ColumnHeader columnHeaderCategory;
     }
 }
