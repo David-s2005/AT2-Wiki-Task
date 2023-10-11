@@ -43,6 +43,11 @@
             listViewNameCategory = new ListView();
             columnHeaderName = new ColumnHeader();
             columnHeaderCategory = new ColumnHeader();
+            buttonDelete = new Button();
+            buttonEdit = new Button();
+            buttonSearch = new Button();
+            textBoxInput = new TextBox();
+            label1 = new Label();
             groupBoxStructure.SuspendLayout();
             SuspendLayout();
             // 
@@ -80,6 +85,7 @@
             textBoxName.Name = "textBoxName";
             textBoxName.Size = new Size(100, 23);
             textBoxName.TabIndex = 4;
+            textBoxName.DoubleClick += textBoxName_DoubleClick;
             textBoxName.KeyPress += textBoxName_KeyPress;
             // 
             // labelName
@@ -168,6 +174,7 @@
             listViewNameCategory.TabIndex = 35;
             listViewNameCategory.UseCompatibleStateImageBehavior = false;
             listViewNameCategory.View = View.Details;
+            listViewNameCategory.SelectedIndexChanged += listViewNameCategory_SelectedIndexChanged;
             // 
             // columnHeaderName
             // 
@@ -177,11 +184,62 @@
             // 
             columnHeaderCategory.Text = "Category";
             // 
+            // buttonDelete
+            // 
+            buttonDelete.Location = new Point(12, 39);
+            buttonDelete.Name = "buttonDelete";
+            buttonDelete.Size = new Size(75, 23);
+            buttonDelete.TabIndex = 36;
+            buttonDelete.Text = "Delete";
+            buttonDelete.UseVisualStyleBackColor = true;
+            buttonDelete.Click += buttonDelete_Click;
+            // 
+            // buttonEdit
+            // 
+            buttonEdit.Location = new Point(93, 41);
+            buttonEdit.Name = "buttonEdit";
+            buttonEdit.Size = new Size(75, 23);
+            buttonEdit.TabIndex = 37;
+            buttonEdit.Text = "Edit";
+            buttonEdit.UseVisualStyleBackColor = true;
+            buttonEdit.Click += buttonEdit_Click;
+            // 
+            // buttonSearch
+            // 
+            buttonSearch.Location = new Point(93, 70);
+            buttonSearch.Name = "buttonSearch";
+            buttonSearch.Size = new Size(75, 23);
+            buttonSearch.TabIndex = 38;
+            buttonSearch.Text = "Search";
+            buttonSearch.UseVisualStyleBackColor = true;
+            buttonSearch.Click += buttonSearch_Click;
+            // 
+            // textBoxInput
+            // 
+            textBoxInput.Location = new Point(174, 25);
+            textBoxInput.Name = "textBoxInput";
+            textBoxInput.Size = new Size(100, 23);
+            textBoxInput.TabIndex = 39;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(174, 7);
+            label1.Name = "label1";
+            label1.Size = new Size(35, 15);
+            label1.TabIndex = 40;
+            label1.Text = "Input";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(516, 280);
+            Controls.Add(label1);
+            Controls.Add(textBoxInput);
+            Controls.Add(buttonSearch);
+            Controls.Add(buttonEdit);
+            Controls.Add(buttonDelete);
             Controls.Add(listViewNameCategory);
             Controls.Add(labelDefinition);
             Controls.Add(textBoxDefinition);
@@ -219,5 +277,10 @@
         private ListView listViewNameCategory;
         private ColumnHeader columnHeaderName;
         private ColumnHeader columnHeaderCategory;
+        private Button buttonDelete;
+        private Button buttonEdit;
+        private Button buttonSearch;
+        private TextBox textBoxInput;
+        private Label label1;
     }
 }
