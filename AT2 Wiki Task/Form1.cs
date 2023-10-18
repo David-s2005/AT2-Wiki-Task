@@ -63,7 +63,11 @@ namespace AT2_Wiki_Task
         {
             if (e.KeyChar == (int)Keys.Enter)
             {
-                comboBoxCategory.Items.Add(comboBoxCategory.Text);
+                if (categoryValid() == true) 
+                {
+                    comboBoxCategory.Items.Add(comboBoxCategory.Text);
+                }
+
                 addItem();
                 populateForm();
             }
@@ -216,7 +220,7 @@ namespace AT2_Wiki_Task
         public void populateForm()
         {
             listViewNameCategory.Items.Clear();
-            comboBoxCategory.Items.Clear();
+            //comboBoxCategory.Items.Clear();
 
             Wiki.Sort();
 
@@ -300,7 +304,6 @@ namespace AT2_Wiki_Task
             textBoxInput.Text = "";
             textBoxDefinition.Text = "";
             comboBoxCategory.Text = "";
-            comboBoxCategory.Items.Clear();
             radioButtonLinear.Checked = false;
             radioButtonNonLinear.Checked = false;
         }
