@@ -59,6 +59,7 @@
             buttonLoad.TabIndex = 1;
             buttonLoad.Text = "Load";
             buttonLoad.UseVisualStyleBackColor = true;
+            buttonLoad.Click += buttonLoad_Click;
             // 
             // buttonSave
             // 
@@ -68,6 +69,7 @@
             buttonSave.TabIndex = 2;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += buttonSave_Click;
             // 
             // buttonAdd
             // 
@@ -129,7 +131,7 @@
             // radioButtonNonLinear
             // 
             radioButtonNonLinear.AutoSize = true;
-            radioButtonNonLinear.Location = new Point(6, 47);
+            radioButtonNonLinear.Location = new Point(6, 22);
             radioButtonNonLinear.Name = "radioButtonNonLinear";
             radioButtonNonLinear.Size = new Size(85, 19);
             radioButtonNonLinear.TabIndex = 1;
@@ -140,7 +142,7 @@
             // radioButtonLinear
             // 
             radioButtonLinear.AutoSize = true;
-            radioButtonLinear.Location = new Point(6, 22);
+            radioButtonLinear.Location = new Point(6, 47);
             radioButtonLinear.Name = "radioButtonLinear";
             radioButtonLinear.Size = new Size(57, 19);
             radioButtonLinear.TabIndex = 0;
@@ -252,7 +254,8 @@
             Controls.Add(buttonSave);
             Controls.Add(buttonLoad);
             Name = "Form1";
-            Text = "x";
+            Text = "Wiki Application";
+            FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             groupBoxStructure.ResumeLayout(false);
             groupBoxStructure.PerformLayout();

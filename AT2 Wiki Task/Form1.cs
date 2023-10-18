@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Microsoft.VisualBasic;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics.Contracts;
 
 namespace AT2_Wiki_Task
 {
@@ -18,10 +19,12 @@ namespace AT2_Wiki_Task
         {
             InitializeComponent();
         }
-
+        // Global list with Information type that contains all Information objects.
         static public List<Information> Wiki = new List<Information>();
 
         #region event handlers
+        // Button add event that will add a new Information object to the global list. It will check if either of the radio buttons are checked
+        // addItem and populateForm methods are then called.
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             if (radioButtonLinear.Checked == false && radioButtonNonLinear.Checked == false)
@@ -38,12 +41,13 @@ namespace AT2_Wiki_Task
                 populateForm();
             }
         }
-
+        // form load event that handles what happens when the form is loaded. populateForm and populateComboBox methods are called.
         private void Form1_Load(object sender, EventArgs e)
         {
-            Information info = new Information("Array", "Array", "Linear", "");
+            populateForm();
+            populateComboBox();
         }
-
+        // comboBoxCategory_KeyPress event that will create a new information object to the global list if the enter key is pressed.
         private void comboBoxCategory_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (int)Keys.Enter)
@@ -53,6 +57,8 @@ namespace AT2_Wiki_Task
                 populateForm();
             }
         }
+        // textBoxName_KeyPress event that occurs when the enter key is pressed when the name textbox is selected. Pretty much the same
+        // as the comboBoxCategory_KeyPress method.
         private void textBoxName_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (int)Keys.Enter)
@@ -62,7 +68,7 @@ namespace AT2_Wiki_Task
                 populateForm();
             }
         }
-
+        // This method is responsible for populating the input field textboxes with the selected item from the listview.
         private void listViewNameCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewNameCategory.SelectedItems.Count > 0)
@@ -88,7 +94,13 @@ namespace AT2_Wiki_Task
                 }
             }
         }
-
+        // the save button will call the saveData method when clicked.
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            saveData();
+        }
+        // The delete button event will remove the selected item from the global array using the selected listview items index
+        // and will repopulate the form once completed. also has a dialog box to confirm the users choice.
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             if (listViewNameCategory.SelectedItems.Count > 0)
@@ -110,7 +122,14 @@ namespace AT2_Wiki_Task
                 MessageBox.Show("Please select a item you want to delete.");
             }
         }
-
+        // Closing the form will result in the saveData method being called.
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            saveData();
+        }
+        // The edit button event will result in the selected item from the listview being used to find the selected item via its index,
+        // and change the selected object in the global list using its index and the input fields. This method will also make sure the 
+        // user doesnt add a second already existing category.
         private void buttonEdit_Click(object sender, EventArgs e)
         {
 
@@ -139,9 +158,7 @@ namespace AT2_Wiki_Task
 
         private bool textBoxName_TextChanged()
         {
-            bool nameChanged = true;
-
-            return nameChanged;
+            return true;
         }
 
         private void buttonSearch_Click(object sender, EventArgs e)
@@ -155,6 +172,12 @@ namespace AT2_Wiki_Task
                 textBoxInput.Text = "";
             }
             else MessageBox.Show($"{textBoxName.Text} was not found");
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            loadData();
+            populateForm();
         }
 
         private void textBoxName_DoubleClick(object sender, EventArgs e)
@@ -248,6 +271,12 @@ namespace AT2_Wiki_Task
             return "Non-Linear";
         }
 
+        public void checkRadioButtonWithIndex(int index)
+        {
+            RadioButton selectedRadioButton = (RadioButton)groupBoxStructure.Controls[index];
+            selectedRadioButton.Checked = true;
+        }
+
         public int findIndexByName(string name)
         {
             Information searchInformation = new Information(name, "placeholder", "placeholder", "placeholder");
@@ -266,7 +295,7 @@ namespace AT2_Wiki_Task
             radioButtonNonLinear.Checked = false;
         }
 
-        public void saveData() 
+        public void saveData()
         {
             try
             {
@@ -276,16 +305,81 @@ namespace AT2_Wiki_Task
                 saveFileDialog.DefaultExt = "dat";
                 saveFileDialog.FileName = "InformationWiki.dat";
 
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) 
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = saveFileDialog.FileName;
 
-                    // continue here...
+                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                    using (BinaryWriter writer = new BinaryWriter(fileStream))
+                    {
+                        writer.Write(Wiki.Count);
+
+                        foreach (Information info in Wiki)
+                        {
+                            writer.Write(info.Name);
+                            writer.Write(info.Category);
+                            writer.Write(info.Structure);
+                            writer.Write(info.Definiton);
+                        }
+                    }
                 }
             }
-            catch(Exception error) 
+            catch (Exception error)
             {
                 MessageBox.Show("Failed to write to file!");
+            }
+        }
+
+        public void loadData()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "DAT Files (*.dat)|*.dat|All Files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                using (BinaryReader reader = new BinaryReader(fileStream))
+                {
+                    int linesNumber = reader.ReadInt32();
+
+                    for (int i = 0; i < linesNumber; i++)
+                    {
+                        string name = reader.ReadString();
+                        string category = reader.ReadString();
+                        string structure = reader.ReadString();
+                        string definition = reader.ReadString();
+
+                        Information info = new Information(name, category, structure, definition);
+                        Wiki.Add(info);
+                    }
+                }
+            }
+        }
+
+        public void populateComboBox()
+        {
+            string filePath = "Categories.txt";
+
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        string category;
+
+                        while ((category = reader.ReadLine()) != null)
+                        {
+                            comboBoxCategory.Items.Add(category);
+                        }
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show("Failed to read file!");
             }
         }
 
