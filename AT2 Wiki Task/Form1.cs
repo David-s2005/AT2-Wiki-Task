@@ -155,12 +155,14 @@ namespace AT2_Wiki_Task
             }
             else MessageBox.Show("Please select a item from the list.");
         }
-
+        // simple event that returns true in the name textbox is changed.
         private bool textBoxName_TextChanged()
         {
             return true;
         }
-
+        // Search button event that will search for a item in the global list using the input as a field. It will the findIndexByName method
+        // to return a index. If the item is found a message will be shown displaying the location of the item via its index in the global
+        // list, otherwise a message will show saying the item wasnt found.
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             int index = findIndexByName(textBoxInput.Text);
@@ -173,13 +175,13 @@ namespace AT2_Wiki_Task
             }
             else MessageBox.Show($"{textBoxName.Text} was not found");
         }
-
+        // Loading the form will call the loadData and populateForm methods.
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             loadData();
             populateForm();
         }
-
+        // double clicking the name textbox will result in the resetForm method being called. this will clear the input fields.
         private void textBoxName_DoubleClick(object sender, EventArgs e)
         {
             resetForm();
@@ -188,7 +190,9 @@ namespace AT2_Wiki_Task
         #endregion
 
         #region methods
-
+        // addItem method that will create a new Information object and append it to the global list. Before doing this the method
+        // will make sure the name is valid by checking if there are any duplicate names already in the Information objects. The item
+        // is then added and sorted.
         public void addItem()
         {
             bool nameOK = validName(textBoxName.Text);
@@ -206,7 +210,9 @@ namespace AT2_Wiki_Task
             }
             else MessageBox.Show("The name cannot be a duplicate value.");
         }
-
+        // populateForm method that populate the listView with all the items in the global list. The listview and combobox are cleared
+        // before the global list is sorted and each item being appended to the listview. It will also check is the category already exists
+        // in the combobox, if so the category will not be added to the combobox, otherwise it will.
         public void populateForm()
         {
             listViewNameCategory.Items.Clear();
@@ -228,7 +234,9 @@ namespace AT2_Wiki_Task
                 }
             }
         }
-
+        // ValidName method will check if the input given already exists within the global list. It does this via using the .Exists
+        // method which will check if any of the objects inside of the global list already has the name given. If There is a duplicate
+        // name then the method will return false, otherwise it will return true. This method will also check if the input is null.
         public bool validName(string nameInput)
         {
             if (Wiki.Exists(name => name.Name == nameInput))
@@ -247,7 +255,8 @@ namespace AT2_Wiki_Task
             }
             return true;
         }
-
+        // categoryValid method return a boolean depending on if the input category already exists in the combobox, it will iterate through
+        // each item in the combobox until it finds a duplicate or otherwise.
         public bool categoryValid()
         {
             foreach (string category in comboBoxCategory.Items)
@@ -261,7 +270,7 @@ namespace AT2_Wiki_Task
             }
             return true;
         }
-
+        // simple linearSelected method that will return the selected radiobutton as a string (e.g. if linear is selected then "Linear" is returned.)
         public string linearSelected()
         {
             if (radioButtonLinear.Checked == true)
@@ -270,20 +279,21 @@ namespace AT2_Wiki_Task
             }
             return "Non-Linear";
         }
-
+        // This method will check a radio button using its index within the groupbox.
         public void checkRadioButtonWithIndex(int index)
         {
             RadioButton selectedRadioButton = (RadioButton)groupBoxStructure.Controls[index];
             selectedRadioButton.Checked = true;
         }
-
+        // findIndexByName method that will return the index is the passed value in the global list using the BinarySearch method after it
+        // is sorted and a new placeholder object is created to allow a comparison to occur.
         public int findIndexByName(string name)
         {
             Information searchInformation = new Information(name, "placeholder", "placeholder", "placeholder");
             Wiki.Sort();
             return Wiki.BinarySearch(searchInformation);
         }
-
+        // resetForm method that simply clears all the the input fields.
         public void resetForm()
         {
             textBoxName.Text = "";
@@ -294,7 +304,8 @@ namespace AT2_Wiki_Task
             radioButtonLinear.Checked = false;
             radioButtonNonLinear.Checked = false;
         }
-
+        // saveData method that will use fileStream and BinaryWriter to write all the objects inside of the global list into a .dat file.
+        // a dialog box is used to allow the user to save the .dat file to a custom spot with a custom name.
         public void saveData()
         {
             try
@@ -329,7 +340,8 @@ namespace AT2_Wiki_Task
                 MessageBox.Show("Failed to write to file!");
             }
         }
-
+        // loadData method that will read from a .dat file and append all the information into new Information that are created every iteration.
+        // The user can select a custom .dat they wish to load from a dialog box.
         public void loadData()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -357,7 +369,7 @@ namespace AT2_Wiki_Task
                 }
             }
         }
-
+        // populateComboBox that reads from a text file in the programs working directory that contains all the categorys from the matrix.
         public void populateComboBox()
         {
             string filePath = "Categories.txt";
