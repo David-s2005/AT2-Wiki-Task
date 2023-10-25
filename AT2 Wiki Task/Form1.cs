@@ -182,8 +182,11 @@ namespace AT2_Wiki_Task
         // Loading the form will call the loadData and populateForm methods.
         private void buttonLoad_Click(object sender, EventArgs e)
         {
+            Wiki.Clear();
+
             loadData();
             populateForm();
+            populateComboBox();
         }
         // double clicking the name textbox will result in the resetForm method being called. this will clear the input fields.
         private void textBoxName_DoubleClick(object sender, EventArgs e)
@@ -220,7 +223,7 @@ namespace AT2_Wiki_Task
         public void populateForm()
         {
             listViewNameCategory.Items.Clear();
-            //comboBoxCategory.Items.Clear();
+            comboBoxCategory.Items.Clear();
 
             Wiki.Sort();
 
@@ -267,7 +270,7 @@ namespace AT2_Wiki_Task
             {
                 string iterationItem = category.ToString();
 
-                if (iterationItem.Equals(comboBoxCategory.Text))
+                if (iterationItem.Equals(category))
                 {
                     return false;
                 }
